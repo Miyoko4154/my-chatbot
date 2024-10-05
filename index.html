@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot pro Plánování Kuchyní</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+        }
+        main {
+            padding: 2em;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            width: 300px;
+            height: 400px;
+            display: none;
+        }
+        .chatbot-header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .chatbot-body {
+            padding: 10px;
+            height: 320px;
+            overflow-y: auto;
+        }
+        .chatbot-input {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            display: flex;
+        }
+        .chatbot-input input {
+            flex: 1;
+            padding: 5px;
+        }
+        .chatbot-input button {
+            padding: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .open-chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>AI Chatbot pro Plánování Kuchyní</h1>
+</header>
+
+<main>
+    <p>Vítejte! Můžete mi pokládat otázky ohledně plánování kuchyní. Klikněte na ikonu chatu v pravém dolním rohu pro zahájení konverzace.</p>
+</main>
+
+<footer>
+    <p>&copy; 2024 Plánování Kuchyní</p>
+</footer>
+
+<!-- Chatbot Button -->
+<button class="open-chatbot" onclick="toggleChat()">💬</button>
+
+<!-- Chatbot Container -->
+<div class="chatbot-container" id="chatbot">
+    <div class="chatbot-header">
+        <h3>Chatbot</h3>
+    </div>
+    <div class="chatbot-body" id="chatbotBody">
+        <p>Vítejte! Jak vám mohu pomoci s plánováním kuchyně?</p>
+    </div>
+    <div class="chat
