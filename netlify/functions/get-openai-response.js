@@ -1,12 +1,15 @@
-// Importuje 'node-fetch' pro volání API
+// Import knihovny 'node-fetch' pro volání API
 const fetch = require('node-fetch');
 
-// Definice serverless funkce
-exports.handler = async function (event, context) {
-  // Načte API klíč z proměnné prostředí
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+// Načtení API klíče z proměnné prostředí
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-  // Pokud API klíč není definován, vrátí chybu
+// Exportování funkce handleru, kterou volá Netlify
+exports.handler = async function (event, context) {
+  // Kontrola, zda je API klíč správně načten
+  console.log("Načtený API klíč z proměnné prostředí:", OPENAI_API_KEY);
+
+  // Pokud není klíč nastaven, vrátí chybu
   if (!OPENAI_API_KEY) {
     return {
       statusCode: 500,
@@ -15,18 +18,18 @@ exports.handler = async function (event, context) {
   }
 
   try {
-    // Získá uživatelský vstup ze zprávy (z frontendového formuláře)
+    // Načtení zprávy od uživatele z těla požadavku
     const userMessage = JSON.parse(event.body).message;
 
-    // Volání OpenAI API s uživatelskou zprávou
+    // Odeslání požadavku na OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${OPENAI_API_KEY}`  // Použití API klíče z proměnné prostředí
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-3.5-turbo',  // Použití modelu GPT-3.5
         messages: [{ role: 'user', content: userMessage }],
       }),
     });
@@ -40,7 +43,7 @@ exports.handler = async function (event, context) {
       };
     }
 
-    // Převede odpověď API na JSON
+    // Načtení odpovědi z API do JSON formátu
     const data = await response.json();
 
     // Vrátí odpověď ve formátu JSON
@@ -49,7 +52,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({ message: data.choices[0].message.content }),
     };
   } catch (error) {
-    // Pokud nastane chyba, vrátí chybovou zprávu
+    // Chyba při volání API
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Interní chyba serveru: " + error.message }),
