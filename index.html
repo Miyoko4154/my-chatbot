@@ -1,118 +1,78 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Školení Plánování Kuchyní</title>
+    <title>AI Chatbot – Plánování Kuchyní</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1em;
-            text-align: center;
-        }
-
-        main {
-            padding: 2em;
-            text-align: center;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1em;
-            position: fixed;
             width: 100%;
-            bottom: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
         }
 
         .chatbot-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: #fff;
-            border: 1px solid #ccc;
-            width: 300px;
-            height: 400px;
-            display: none; /* Set to "block" to show */
+            border: none;
+            display: flex;
+            flex-direction: column;
         }
 
         .chatbot-header {
             background-color: #333;
             color: white;
-            padding: 10px;
+            padding: 20px;
             text-align: center;
+            font-size: 24px;
         }
 
         .chatbot-body {
             padding: 10px;
-            height: 320px;
+            height: calc(100% - 150px); /* Dynamicky nastav výšku podle headeru a footeru */
             overflow-y: auto;
+            background-color: #f9f9f9;
+            flex-grow: 1;
         }
 
         .chatbot-input {
-            padding: 10px;
-            border-top: 1px solid #ccc;
+            padding: 20px;
+            border-top: 1px solid #ddd;
             display: flex;
+            align-items: center;
         }
 
         .chatbot-input input {
             flex: 1;
-            padding: 5px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
         }
 
         .chatbot-input button {
-            padding: 5px;
+            padding: 15px 20px;
             background-color: #333;
             color: white;
             border: none;
             cursor: pointer;
-        }
-
-        .open-chatbot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 50%;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Školení Plánování Kuchyní</h1>
-</header>
-
-<main>
-    <p>Vítejte na stránce pro školení v plánování kuchyní. Zde naleznete všechny důležité informace a nástroje, které vám pomohou k úspěšnému plánování a realizaci kuchyní.</p>
-    <p>Klikněte na ikonu v pravém dolním rohu pro spuštění chatbota.</p>
-</main>
-
-<footer>
-    <p>&copy; 2024 Školení Plánování Kuchyní</p>
-</footer>
-
-<!-- Chatbot Button -->
-<button class="open-chatbot" onclick="toggleChat()">💬</button>
-
-<!-- Chatbot Container -->
+<!-- Chatbot Container přes celou stránku -->
 <div class="chatbot-container" id="chatbot">
     <div class="chatbot-header">
-        <h3>Chatbot</h3>
+        <h3>Chatbot pro Plánování Kuchyní</h3>
     </div>
     <div class="chatbot-body" id="chatbotBody">
         <p>Vítejte! Jak vám mohu pomoci s plánováním kuchyně?</p>
@@ -124,28 +84,24 @@
 </div>
 
 <script>
-    function toggleChat() {
-        var chatbot = document.getElementById("chatbot");
-        if (chatbot.style.display === "block") {
-            chatbot.style.display = "none";
-        } else {
-            chatbot.style.display = "block";
-        }
-    }
-
     function sendMessage() {
         var userInput = document.getElementById("userInput").value;
         var chatbotBody = document.getElementById("chatbotBody");
 
         if (userInput.trim() !== "") {
+            // Zobrazí uživatelskou zprávu v okně chatu
             var userMessage = document.createElement("p");
             userMessage.textContent = "Vy: " + userInput;
+            userMessage.style.color = "blue"; // Změna barvy uživatelské zprávy
             chatbotBody.appendChild(userMessage);
 
+            // Simulovaná odpověď od bota
             var botMessage = document.createElement("p");
             botMessage.textContent = "Bot: Zatím nemám odpověď, ale brzy se to naučím!";
+            botMessage.style.color = "green"; // Změna barvy zprávy od bota
             chatbotBody.appendChild(botMessage);
 
+            // Vymaže vstupní pole a posune chat dolů
             document.getElementById("userInput").value = "";
             chatbotBody.scrollTop = chatbotBody.scrollHeight;
         }
