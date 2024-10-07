@@ -23,7 +23,7 @@ exports.handler = async function (event, context) {
         'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo-16K',
+        model: 'gpt-3.5-turbo-16k',  // Opravený model s malým "k"
         messages: [{ role: 'user', content: userMessage }]
       }),
     });
