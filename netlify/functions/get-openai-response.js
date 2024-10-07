@@ -1,14 +1,9 @@
-// Import knihovny pro volání API
-const fetch = require('node-fetch');  // Ujisti se, že máš nainstalovanou knihovnu `node-fetch`
+const fetch = require('node-fetch');
 
-// Načtení API klíče z proměnné prostředí v Netlify
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-// Ladicí výpis pro kontrolu načteného klíče
 console.log("API klíč z prostředí:", OPENAI_API_KEY);
 
 exports.handler = async function (event, context) {
-  // Ověření, zda je API klíč načten správně
   if (!OPENAI_API_KEY) {
     console.error("API klíč není nastaven. Ukončení funkce.");
     return {
@@ -18,27 +13,26 @@ exports.handler = async function (event, context) {
   }
 
   try {
-    // Načtení zprávy od uživatele z těla požadavku
     const userMessage = JSON.parse(event.body).message;
     console.log("Zpráva od uživatele:", userMessage);
 
-    // Odeslání požadavku do OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`  // Použití API klíče z proměnné prostředí
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: userMessage }],
+        messages: [{ role: 'user', content: userMessage }]
       }),
     });
 
-    // Ověření stavu odpovědi před jejím zpracováním
-    const responseText = await response.text();  // Získej odpověď jako text
-    console.log("Odpověď jako text:", responseText);  // Ladicí výpis odpovědi jako text
+    // Získej odpověď jako text
+    const responseText = await response.text();
+    console.log("Odpověď jako text:", responseText);
 
+    // Kontrola, zda odpověď není prázdná nebo ve špatném formátu
     if (!response.ok || !responseText) {
       console.error("Chyba při volání API:", response.status, response.statusText);
       return {
@@ -55,11 +49,10 @@ exports.handler = async function (event, context) {
       console.error("Chyba při parsování JSON:", error.message);
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "Neplatná odpověď z OpenAI API: " + error.message }),
+        body: JSON.stringify({ error: "Interní chyba serveru: Neplatná odpověď z OpenAI API. Odpověď: " + responseText }),
       };
     }
 
-    // Vrácení odpovědi ve formátu JSON
     console.log("Zpracovaná odpověď z OpenAI API:", data);
     return {
       statusCode: 200,
