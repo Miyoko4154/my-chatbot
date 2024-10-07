@@ -23,8 +23,9 @@ exports.handler = async function (event, context) {
         'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo-16k',  // Opravený model s malým "k"
-        messages: [{ role: 'user', content: userMessage }]
+        model: 'gpt-3.5-turbo-16k',
+        messages: [{ role: 'user', content: userMessage }],
+        max_tokens: 100
       }),
     });
 
@@ -46,7 +47,7 @@ exports.handler = async function (event, context) {
     try {
       data = JSON.parse(responseText);
     } catch (error) {
-      console.error("Chyba při parsování JSON:", error.message);
+      console.error("Chyba při parsování JSON:", error.message, "Odpověď: ", responseText);
       return {
         statusCode: 500,
         body: JSON.stringify({ error: "Interní chyba serveru: Neplatná odpověď z OpenAI API. Odpověď: " + responseText }),
