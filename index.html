@@ -36,7 +36,7 @@
 
         .chatbot-body {
             padding: 10px;
-            height: calc(100% - 150px); /* Dynamicky nastav výšku podle headeru a footeru */
+            height: calc(100% - 150px);
             overflow-y: auto;
             background-color: #f9f9f9;
             flex-grow: 1;
@@ -84,7 +84,7 @@
 </div>
 
 <script>
-    function sendMessage() {
+    async function sendMessage() {
         var userInput = document.getElementById("userInput").value;
         var chatbotBody = document.getElementById("chatbotBody");
 
@@ -92,21 +92,50 @@
             // Zobrazí uživatelskou zprávu v okně chatu
             var userMessage = document.createElement("p");
             userMessage.textContent = "Vy: " + userInput;
-            userMessage.style.color = "blue"; // Změna barvy uživatelské zprávy
+            userMessage.style.color = "blue";
             chatbotBody.appendChild(userMessage);
 
-            // Simulovaná odpověď od bota
-            var botMessage = document.createElement("p");
-            botMessage.textContent = "Bot: Zatím nemám odpověď, ale brzy se to naučím!";
-            botMessage.style.color = "green"; // Změna barvy zprávy od bota
-            chatbotBody.appendChild(botMessage);
-
-            // Vymaže vstupní pole a posune chat dolů
+            // Vymaže vstupní pole
             document.getElementById("userInput").value = "";
-            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+
+            // Volání OpenAI API
+            const apiKey = "YOUR_API_KEY";  // Vlož sem svůj OpenAI API klíč
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{ role: "user", content: userInput }],
+                        max_tokens: 100
+                    })
+                });
+
+                const data = await response.json();
+
+                // Zobrazí odpověď od API
+                var botMessage = document.createElement("p");
+                botMessage.textContent = "Bot: " + data.choices[0].message.content;
+                botMessage.style.color = "green";
+                chatbotBody.appendChild(botMessage);
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+
+            } catch (error) {
+                // Zobrazí chybu, pokud API volání selže
+                var errorMessage = document.createElement("p");
+                errorMessage.textContent = "Chyba: Nelze se připojit k API. Zkontrolujte svůj API klíč nebo připojení k internetu.";
+                errorMessage.style.color = "red";
+                chatbotBody.appendChild(errorMessage);
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            }
         }
     }
 </script>
 
 </body>
 </html>
+
